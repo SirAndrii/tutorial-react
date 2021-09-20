@@ -13,6 +13,25 @@ class App extends React.Component {
     isLoading: false, // статус для манипуляций "прелоадером" 
   };
 
+  static getDerivedStateFromProps(props, state) {
+    let nextFilteredNews;
+    if (Array.isArray(state.news)){
+
+      nextFilteredNews = [...state.news] 
+  
+      nextFilteredNews.forEach((item, index) => {
+        if (item.bigText.toLowerCase().indexOf('pubg') !== -1) {
+          item.bigText = 'СПАМ'
+        }
+      })
+  
+      return { // возвращаем новое состояние
+        filteredNews: nextFilteredNews,
+      }
+    }
+    return null;
+  }
+
   componentDidMount() {
     this.setState({ isLoading: true })
     fetch('http://localhost:3000/data/newsData.json')
